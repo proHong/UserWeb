@@ -12,10 +12,12 @@ import com.example.userweb.service.MemberRepository;
 import com.example.userweb.service.ResponseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,9 +42,9 @@ public class MemberController {
         return resService.getListResult(memberRepo.findAll());
     }
 
-    @ApiOperation(value = "멤버 상세 정보", notes = "멤버를 정보를 확인한다.")
+    @ApiOperation(value = "멤버 상세 정보", notes = "id로 멤버를 정보를 확인한다.")
     @GetMapping(value = "/member/{id}")
-    public SingleResult<Member> findMember(@ApiParam(value = "멤버ID", required = true) @PathVariable Long id){
+    public SingleResult<Member> findMember(@ApiParam(value = "멤버ID", required = true) @PathVariable String id){
         return resService.getSingleResult(memberRepo.findById(id).orElse(null));
     }
 
@@ -51,6 +53,23 @@ public class MemberController {
     @PostMapping(value = "/member")
     public CommonResult registerMember(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("member") Member member){
         memberRepo.save(member);
+        return resService.getSuccessResult();
+    }
+
+    @ApiOperation(value = "멤버 수정", notes = "멤버를 수정한다.")
+    @Transactional
+    @PutMapping(value = "/member")
+    public CommonResult upadateMember(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("member") Member member){
+        memberRepo.updatePw(member);
+        memberRepo.updateName(member);
+        return resService.getSuccessResult();
+    }
+
+    @ApiOperation(value = "멤버 삭제", notes = "멤버를 삭제한다.")
+    @Transactional
+    @DeleteMapping(value = "/member/{id}")
+    public CommonResult deleteMember(@ApiParam(value = "멤버id", required = true) @PathVariable String id){
+        memberRepo.deleteById(id);
         return resService.getSuccessResult();
     }
 }
