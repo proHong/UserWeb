@@ -16,24 +16,21 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(value = "멤버 넘버", hidden = true)
-    private Long m_no;
 
+    @Id
     @Column(nullable = false, unique = true, length = 30)
     @ApiModelProperty(value = "멤버 아이디", required = true)
-    private String id;
+    private String m_id;
 
     @Column(nullable = false, length = 100)
     @ApiModelProperty(value = "멤버 비밀번호", required = true)
-    private String pw;
+    private String m_pw;
 
     @Column(nullable = false, length = 100)
     @ApiModelProperty(value = "멤버 이름", required = true)
-    private String name;
+    private String m_name;
 
     @CreationTimestamp
     @ApiModelProperty(value = "등록일자", required = false)
-    private Timestamp regdate;
+    private Timestamp m_regdate;
 }
