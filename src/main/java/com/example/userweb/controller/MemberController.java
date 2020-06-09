@@ -5,7 +5,11 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import com.example.userweb.domain.Member;
+import com.example.userweb.domain.response.CommonResult;
+import com.example.userweb.domain.response.ListResult;
+import com.example.userweb.domain.response.SingleResult;
 import com.example.userweb.service.MemberRepository;
+import com.example.userweb.service.ResponseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,25 +29,28 @@ import io.swagger.annotations.ApiParam;
 public class MemberController {
 
     @Autowired
-    private MemberRepository repo;
+    private MemberRepository memberRepo;
+
+    @Autowired
+    private ResponseService resService;
 
     @ApiOperation(value = "멤버 조회", notes = "모든 멤버를 조회한다.")
     @GetMapping(value = "/members")
-    public  List<Member> allMembers(){
-        return repo.findAll();
+    public  ListResult<Member> allMembers(){
+        return resService.getListResult(memberRepo.findAll());
     }
 
     @ApiOperation(value = "멤버 상세 정보", notes = "멤버를 정보를 확인한다.")
     @GetMapping(value = "/member/{id}")
-    public Member member(@ApiParam(value = "멤버ID", required = true) @PathVariable Long id){
-        return repo.findById(id).orElse(null);
+    public SingleResult<Member> findMember(@ApiParam(value = "멤버ID", required = true) @PathVariable Long id){
+        return resService.getSingleResult(memberRepo.findById(id).orElse(null));
     }
 
     @ApiOperation(value = "멤버 추가", notes = "멤버를 추가한다.")
     @Transactional
     @PostMapping(value = "/member")
-    public Member registerMember(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("member") Member member){
-        repo.save(member);
-        return member;
+    public CommonResult registerMember(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("member") Member member){
+        memberRepo.save(member);
+        return resService.getSuccessResult();
     }
 }
