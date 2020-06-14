@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 
 import com.example.userweb.advice.Exception.CAuthenticationEntryPointException;
+import com.example.userweb.advice.Exception.CNotOwnerException;
+import com.example.userweb.advice.Exception.CResourceNotExistException;
 import com.example.userweb.advice.Exception.CSigninFailedException;
 import com.example.userweb.advice.Exception.CUserNotFoundException;
 import com.example.userweb.domain.response.CommonResult;
@@ -50,6 +52,16 @@ public class ExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public CommonResult AccessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         return responseService.getFailResult(Integer.valueOf(getMessage("accessDenied.code")), getMessage("accessDenied.msg"));
+    }
+    @ExceptionHandler(CNotOwnerException.class)
+    @ResponseStatus(HttpStatus.NON_AUTHORITATIVE_INFORMATION)
+    public CommonResult notOwnerException(HttpServletRequest request, CNotOwnerException e) {
+        return responseService.getFailResult(Integer.valueOf(getMessage("notOwner.code")), getMessage("notOwner.msg"));
+    }
+    @ExceptionHandler(CResourceNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CommonResult resourceNotExistException(HttpServletRequest request, CResourceNotExistException e) {
+        return responseService.getFailResult(Integer.valueOf(getMessage("resourceNotExist.code")), getMessage("resourceNotExist.msg"));
     }
     // code정보에 해당하는 메시지를 조회합니다.
     private String getMessage(String code) {

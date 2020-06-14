@@ -16,10 +16,12 @@ public class ParamsPost {
     @Size(min = 2, max = 50)
     @ApiModelProperty(value = "작성자명", required = true)
     private String writer;
+
     @NotEmpty
     @Size(min = 2, max = 100)
     @ApiModelProperty(value = "제목", required = true)
     private String title;
+    
     @Size(min = 2, max = 500)
     @ApiModelProperty(value = "내용", required = true)
     private String content;
