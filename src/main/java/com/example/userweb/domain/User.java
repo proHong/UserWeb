@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
+import com.example.userweb.domain.common.CommonDateEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +27,8 @@ import lombok.*;
 @Table(name = "user")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class User extends CommonDateEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

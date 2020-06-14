@@ -27,6 +27,7 @@ dependencies {
 	implementation 'net.rakugakibox.util:yaml-resource-bundle:1.1'
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+	compile group: 'javax.validation', name: 'validation-api', version: '1.0.0.GA'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'mysql:mysql-connector-java'

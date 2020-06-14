@@ -27,4 +27,5 @@ spring:
       ddl-auto: update
   jwt:
     secret: govlepel@$&
+    
 

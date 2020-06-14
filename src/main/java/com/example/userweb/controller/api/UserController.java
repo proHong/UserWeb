@@ -1,7 +1,5 @@
 package com.example.userweb.controller.api;
 
-import javax.transaction.Transactional;
-
 import com.example.userweb.advice.Exception.CUserNotFoundException;
 import com.example.userweb.domain.User;
 import com.example.userweb.domain.response.CommonResult;
