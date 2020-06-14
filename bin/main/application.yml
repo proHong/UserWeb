@@ -18,8 +18,6 @@ spring:
       enabled: true
     livereload:
       enabled: true
-    freemaker:
-      cache: false
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
@@ -27,4 +25,6 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: update
+  jwt:
+    secret: govlepel@$&
 

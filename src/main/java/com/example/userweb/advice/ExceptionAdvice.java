@@ -6,6 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 
+import com.example.userweb.advice.Exception.CSigninFailedException;
 import com.example.userweb.advice.Exception.CUserNotFoundException;
 import com.example.userweb.domain.response.CommonResult;
 import com.example.userweb.service.ResponseService;
@@ -35,6 +36,11 @@ public class ExceptionAdvice {
         // 예외 처리의 메시지를 MessageSource에서 가져오도록 수정
         return responseService.getFailResult(Integer.valueOf(getMessage("userNotFound.code")), getMessage("userNotFound.msg"));
     }
+    @ExceptionHandler(CSigninFailedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected CommonResult signinFailed(HttpServletRequest request, CSigninFailedException e) {
+        return responseService.getFailResult(Integer.valueOf(getMessage("SigninFailed.code")), getMessage("SigninFailed.msg"));
+}
     // code정보에 해당하는 메시지를 조회합니다.
     private String getMessage(String code) {
         return getMessage(code, null);
