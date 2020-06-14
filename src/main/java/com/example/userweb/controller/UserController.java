@@ -1,14 +1,13 @@
 package com.example.userweb.controller;
 
-import java.util.List;
-
 import javax.transaction.Transactional;
 
-import com.example.userweb.domain.Member;
+import com.example.userweb.advice.Exception.CUserNotFoundException;
+import com.example.userweb.domain.User;
 import com.example.userweb.domain.response.CommonResult;
 import com.example.userweb.domain.response.ListResult;
 import com.example.userweb.domain.response.SingleResult;
-import com.example.userweb.service.MemberRepository;
+import com.example.userweb.repo.UserRepository;
 import com.example.userweb.service.ResponseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,51 +24,50 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
-@Api(tags = {"1. Member"})
+@Api(tags = {"1. user"})
 @RestController
 @RequestMapping(value = "/api")
-public class MemberController {
+public class UserController {
 
     @Autowired
-    private MemberRepository memberRepo;
+    private UserRepository userRepo;
 
     @Autowired
     private ResponseService resService;
 
     @ApiOperation(value = "멤버 조회", notes = "모든 멤버를 조회한다.")
-    @GetMapping(value = "/members")
-    public  ListResult<Member> allMembers(){
-        return resService.getListResult(memberRepo.findAll());
+    @GetMapping(value = "/users")
+    public  ListResult<User> allUsers(){
+        return resService.getListResult(userRepo.findAll());
     }
 
     @ApiOperation(value = "멤버 상세 정보", notes = "id로 멤버를 정보를 확인한다.")
-    @GetMapping(value = "/member/{id}")
-    public SingleResult<Member> findMember(@ApiParam(value = "멤버ID", required = true) @PathVariable String id){
-        return resService.getSingleResult(memberRepo.findById(id).orElse(null));
+    @GetMapping(value = "/user/{id}")
+    public SingleResult<User> findUser(@ApiParam(value = "멤버pk", required = true) @PathVariable Long id){
+        return resService.getSingleResult(userRepo.findById(id).orElseThrow(CUserNotFoundException::new));
     }
 
     @ApiOperation(value = "멤버 추가", notes = "멤버를 추가한다.")
     @Transactional
-    @PostMapping(value = "/member")
-    public CommonResult registerMember(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("member") Member member){
-        memberRepo.save(member);
+    @PostMapping(value = "/user")
+    public CommonResult registerUser(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("user") User user){
+        userRepo.save(user);
         return resService.getSuccessResult();
     }
 
     @ApiOperation(value = "멤버 수정", notes = "멤버를 수정한다.")
     @Transactional
-    @PutMapping(value = "/member")
-    public CommonResult upadateMember(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("member") Member member){
-        memberRepo.updatePw(member);
-        memberRepo.updateName(member);
+    @PutMapping(value = "/user")
+    public CommonResult upadateUser(@ApiParam(value = "멤버{id, pw, name}", required = true) @ModelAttribute("user") User user){
+        userRepo.save(user);
         return resService.getSuccessResult();
     }
 
     @ApiOperation(value = "멤버 삭제", notes = "멤버를 삭제한다.")
     @Transactional
-    @DeleteMapping(value = "/member/{id}")
-    public CommonResult deleteMember(@ApiParam(value = "멤버id", required = true) @PathVariable String id){
-        memberRepo.deleteById(id);
+    @DeleteMapping(value = "/user/{id}")
+    public CommonResult deleteUser(@ApiParam(value = "멤버pk", required = true) @PathVariable Long id){
+        userRepo.deleteById(id);
         return resService.getSuccessResult();
     }
 }
