@@ -5,7 +5,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 
+import com.example.userweb.advice.Exception.CAuthenticationEntryPointException;
 import com.example.userweb.advice.Exception.CSigninFailedException;
 import com.example.userweb.advice.Exception.CUserNotFoundException;
 import com.example.userweb.domain.response.CommonResult;
@@ -40,7 +42,15 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     protected CommonResult signinFailed(HttpServletRequest request, CSigninFailedException e) {
         return responseService.getFailResult(Integer.valueOf(getMessage("SigninFailed.code")), getMessage("SigninFailed.msg"));
-}
+    }
+    @ExceptionHandler(CAuthenticationEntryPointException.class)
+    public CommonResult authenticationEntryPointException(HttpServletRequest request, CAuthenticationEntryPointException e) {
+        return responseService.getFailResult(Integer.valueOf(getMessage("entryPointException.code")), getMessage("entryPointException.msg"));
+    }
+    @ExceptionHandler(AccessDeniedException.class)
+    public CommonResult AccessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+        return responseService.getFailResult(Integer.valueOf(getMessage("accessDenied.code")), getMessage("accessDenied.msg"));
+    }
     // code정보에 해당하는 메시지를 조회합니다.
     private String getMessage(String code) {
         return getMessage(code, null);

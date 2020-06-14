@@ -10,6 +10,7 @@ import com.example.userweb.domain.response.SingleResult;
 import com.example.userweb.repo.UserRepository;
 import com.example.userweb.service.ResponseService;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
+@Secured("ROLE_USER")
 @Api(tags = {"1. user"})
 @RestController
 @RequestMapping(value = "/api")
@@ -41,6 +43,7 @@ public class UserController {
         // 결과데이터가 여러건인경우 getListResult를 이용해서 결과를 출력한다.
         return responseService.getListResult(uRepo.findAll());
     }
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = false, dataType = "String", paramType = "header")
     })
@@ -53,6 +56,7 @@ public class UserController {
         // 결과데이터가 단일건인경우 getSingleResult를 이용해서 결과를 출력한다.
         return responseService.getSingleResult(uRepo.findByUid(id).orElseThrow(CUserNotFoundException::new));
     }
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
@@ -67,6 +71,7 @@ public class UserController {
                 .build();
         return responseService.getSingleResult(uRepo.save(user));
     }
+
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = true, dataType = "String", paramType = "header")
     })
