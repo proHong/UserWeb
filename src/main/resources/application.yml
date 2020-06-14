@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  messages:
+    basename: i18n/exception
+    encoding: UTF-8
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/

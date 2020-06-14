@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -43,7 +44,7 @@ public class UserController {
 
     @ApiOperation(value = "멤버 상세 정보", notes = "id로 멤버를 정보를 확인한다.")
     @GetMapping(value = "/user/{id}")
-    public SingleResult<User> findUser(@ApiParam(value = "멤버pk", required = true) @PathVariable Long id){
+    public SingleResult<User> findUser(@ApiParam(value = "멤버pk", required = true) @PathVariable Long id, @ApiParam(value = "언어", defaultValue = "ko") @RequestParam String lang){
         return resService.getSingleResult(userRepo.findById(id).orElseThrow(CUserNotFoundException::new));
     }
 
